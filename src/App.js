@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { fetchAllModsList, fetchMoreInformation } from './api'
 
 import './App.css'
 
@@ -56,15 +57,33 @@ function App() {
   const [selectedMods, selectedModsSet] = React.useState(null)
 
   React.useEffect(() => {
-    fetch(allModsURL, {
-      method: 'GET',
-      headers: {
-        Authorization: APIkey,
-      },
+    fetchAllModsList().then((allModsListData) => {
+      setMods(allModsListData)
     })
-      .then((res) => res.json())
-      .then((data) => setMods(data))
   }, [])
+
+  /* const getMoreInfo = ({ mods }) => {
+    this.setState(
+      {
+        modName: mods.name,
+      },
+      () => {
+        fetch(
+          `https://api.github.com/repositories/28607958/contents/${this.state.modName}/README.md`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: APIkey,
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data)
+          })
+      }
+    )
+  } */
 
   return (
     <div
@@ -90,7 +109,6 @@ function App() {
                   mods={mods}
                   onClick={(mods) => {
                     selectedModsSet(mods)
-                    //getMoreInfo(mods)
                   }}
                 />
               ))}
