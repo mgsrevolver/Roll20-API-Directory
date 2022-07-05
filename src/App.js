@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import './App.css'
 
-const PokemonType = PropTypes.shape({
+const ModsType = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.shape({
     english: PropTypes.string.isRequired,
@@ -22,31 +22,31 @@ const PokemonType = PropTypes.shape({
   }),
 })
 
-const PokemonRow = ({ pokemon, onClick }) => (
+const ModsRow = ({ mods, onClick }) => (
   <>
-    <tr key={pokemon.id}>
-      <td>{pokemon.name.english}</td>
-      <td>{pokemon.type.join(', ')}</td>
+    <tr key={mods.id}>
+      <td>{mods.name}</td>
+      <td></td>
       <td>
-        <button onClick={() => onClick(pokemon)}>More Information</button>
+        <button onClick={() => onClick(mods)}>More Information</button>
       </td>
     </tr>
   </>
 )
 
-PokemonRow.propTypes = {
-  pokemon: PropTypes.arrayOf(PokemonType),
+ModsRow.propTypes = {
+  mods: PropTypes.arrayOf(ModsType),
 }
 
-const PokemonInfo = ({ name: { english }, base }) => (
+const ModsInfo = ({ name, _links }) => (
   <div>
-    <h2>{english}</h2>
+    <h2>{name}</h2>
     <table>
       <tbody>
-        {Object.keys(base).map((key) => (
+        {Object.keys(_links).map((key) => (
           <tr key={key}>
             <td>{key}</td>
-            <td>{base[key]}</td>
+            <td>{_links[key]}</td>
           </tr>
         ))}
       </tbody>
@@ -54,17 +54,18 @@ const PokemonInfo = ({ name: { english }, base }) => (
   </div>
 )
 
-PokemonInfo.propTypes = PokemonType
+ModsInfo.propTypes = ModsType
 
 function App() {
-  const [filter, filterSet] = React.useState('')
-  const [pokemon, pokemonSet] = React.useState([])
-  const [selectedPokemon, selectedPokemonSet] = React.useState(null)
+  const [mods, setMods] = React.useState([])
+  const [selectedMods, selectedModsSet] = React.useState(null)
+  const APIurl =
+    'https://api.github.com/repos/Roll20/roll20-api-scripts/contents/'
 
   React.useEffect(() => {
-    fetch('http://localhost:3000/starting-react/pokemon.json')
-      .then((resp) => resp.json())
-      .then((data) => pokemonSet(data))
+    fetch(APIurl)
+      .then((res) => res.json())
+      .then((data) => setMods(data))
   }, [])
 
   return (
@@ -75,7 +76,7 @@ function App() {
         paddingTop: '1em',
       }}
     >
-      <h1 className="title">Pokemon Search</h1>
+      <h1 className="title">Roll20 Mods Search</h1>
       <div
         style={{
           display: 'grid',
@@ -84,30 +85,18 @@ function App() {
         }}
       >
         <div>
-          <input
-            type="text"
-            value={filter}
-            onChange={(evt) => filterSet(evt.target.value)}
-          />
           <table width="100%">
             <tbody>
-              {pokemon
-                .filter(({ name: { english } }) =>
-                  english
-                    .toLocaleLowerCase()
-                    .includes(filter.toLocaleLowerCase())
-                )
-                .slice(0, 20)
-                .map((pokemon) => (
-                  <PokemonRow
-                    pokemon={pokemon}
-                    onClick={(pokemon) => selectedPokemonSet(pokemon)}
-                  />
-                ))}
+              {mods.map((mods) => (
+                <ModsRow
+                  mods={mods}
+                  onClick={(mods) => selectedModsSet(mods)}
+                />
+              ))}
             </tbody>
           </table>
         </div>
-        {selectedPokemon && <PokemonInfo {...selectedPokemon} />}
+        {selectedMods && <ModsInfo {...selectedMods} />}
       </div>
     </div>
   )
