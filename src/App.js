@@ -1,28 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { fetchAllModsList, fetchMoreInformation } from './api.tsx'
 
 import './App.css'
 
-const APIkey = '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'
-const allModsURL =
-  'https://api.github.com/repos/Roll20/roll20-api-scripts/contents/'
-
 const ModsType = PropTypes.shape({
   id: PropTypes.string.isRequired,
-  name: PropTypes.shape({
-    english: PropTypes.string.isRequired,
-    japanese: PropTypes.string.isRequired,
-    chinese: PropTypes.string.isRequired,
-    french: PropTypes.string.isRequired,
-  }),
-  type: PropTypes.arrayOf(PropTypes.string.isRequired),
-  base: PropTypes.shape({
-    HP: PropTypes.number.isRequired,
-    Attack: PropTypes.number.isRequired,
-    Defense: PropTypes.number.isRequired,
-    'Sp. Attack': PropTypes.number.isRequired,
-    'Sp. Defense': PropTypes.number.isRequired,
-    Speed: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  _links: PropTypes.shape({
+    self: PropTypes.string.isRequired,
+    git: PropTypes.string.isRequired,
+    html: PropTypes.string.isRequired,
   }),
 })
 
@@ -30,7 +18,7 @@ const ModsRow = ({ mods, onClick }) => (
   <>
     <tr key={mods.id}>
       <td>{mods.name}</td>
-      <td></td>
+      <td>{mods.type}</td>
       <td>
         <button onClick={() => onClick(mods)}>More Information</button>
       </td>
@@ -65,38 +53,10 @@ function App() {
   const [selectedMods, selectedModsSet] = React.useState(null)
 
   React.useEffect(() => {
-    fetch(allModsURL, {
-      method: 'GET',
-      headers: {
-        Authorization: APIkey,
-      },
+    fetchAllModsList().then((allModsListData) => {
+      setMods(allModsListData)
     })
-      .then((res) => res.json())
-      .then((data) => setMods(data))
-  }, [])
-
-  const getMoreInfo = ({ mods }) => {
-    this.setState(
-      {
-        modName: mods.name,
-      },
-      () => {
-        fetch(
-          `https://api.github.com/repositories/28607958/contents/${this.state.modName}/README.md`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: APIkey,
-            },
-          }
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data)
-          })
-      }
-    )
-  }
+  })
 
   return (
     <div
@@ -122,7 +82,7 @@ function App() {
                   mods={mods}
                   onClick={(mods) => {
                     selectedModsSet(mods)
-                    getMoreInfo(mods)
+                    //getMoreInfo(mods)
                   }}
                 />
               ))}
