@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/Roll20-API-Directory/static/css/main.063073f9.chunk.css",
+    "main.js": "/Roll20-API-Directory/static/js/main.a0e4d481.chunk.js",
+    "main.js.map": "/Roll20-API-Directory/static/js/main.a0e4d481.chunk.js.map",
+    "runtime-main.js": "/Roll20-API-Directory/static/js/runtime-main.430309bc.js",
+    "runtime-main.js.map": "/Roll20-API-Directory/static/js/runtime-main.430309bc.js.map",
+    "static/js/2.045960d1.chunk.js": "/Roll20-API-Directory/static/js/2.045960d1.chunk.js",
+    "static/js/2.045960d1.chunk.js.map": "/Roll20-API-Directory/static/js/2.045960d1.chunk.js.map",
+    "index.html": "/Roll20-API-Directory/index.html",
+    "precache-manifest.59c2a966041fca67b827df6f37fd58e2.js": "/Roll20-API-Directory/precache-manifest.59c2a966041fca67b827df6f37fd58e2.js",
+    "service-worker.js": "/Roll20-API-Directory/service-worker.js",
+    "static/css/main.063073f9.chunk.css.map": "/Roll20-API-Directory/static/css/main.063073f9.chunk.css.map",
+    "static/js/2.045960d1.chunk.js.LICENSE.txt": "/Roll20-API-Directory/static/js/2.045960d1.chunk.js.LICENSE.txt",
+    "static/js/main.a0e4d481.chunk.js.LICENSE.txt": "/Roll20-API-Directory/static/js/main.a0e4d481.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.430309bc.js",
+    "static/js/2.045960d1.chunk.js",
+    "static/css/main.063073f9.chunk.css",
+    "static/js/main.a0e4d481.chunk.js"
+  ]
+}
