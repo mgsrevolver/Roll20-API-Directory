@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import './App.css'
 
-const PokemonType = PropTypes.shape({
+const ModsType = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.shape({
     english: PropTypes.string.isRequired,
@@ -22,23 +22,23 @@ const PokemonType = PropTypes.shape({
   }),
 })
 
-const PokemonRow = ({ pokemon, onClick }) => (
+const ModsRow = ({ mods, onClick }) => (
   <>
-    <tr key={pokemon.id}>
-      <td>{pokemon.name.english}</td>
-      <td>{pokemon.type.join(', ')}</td>
+    <tr key={mods.id}>
+      <td>{mods.name}</td>
+      <td></td>
       <td>
-        <button onClick={() => onClick(pokemon)}>More Information</button>
+        <button onClick={() => onClick(mods)}>More Information</button>
       </td>
     </tr>
   </>
 )
 
-PokemonRow.propTypes = {
-  pokemon: PropTypes.arrayOf(PokemonType),
+ModsRow.propTypes = {
+  mods: PropTypes.arrayOf(ModsType),
 }
 
-const PokemonInfo = ({ name: { english }, base }) => (
+const ModsInfo = ({ name: { english }, base }) => (
   <div>
     <h2>{english}</h2>
     <table>
@@ -54,17 +54,17 @@ const PokemonInfo = ({ name: { english }, base }) => (
   </div>
 )
 
-PokemonInfo.propTypes = PokemonType
+ModsInfo.propTypes = ModsType
 
 function App() {
   const [filter, filterSet] = React.useState('')
-  const [pokemon, pokemonSet] = React.useState([])
-  const [selectedPokemon, selectedPokemonSet] = React.useState(null)
+  const [mods, modsSet] = React.useState([])
+  const [selectedMods, selectedModsSet] = React.useState(null)
 
   React.useEffect(() => {
-    fetch('http://localhost:3000/starting-react/pokemon.json')
+    fetch('https://api.github.com/repos/Roll20/roll20-api-scripts/contents/')
       .then((resp) => resp.json())
-      .then((data) => pokemonSet(data))
+      .then((data) => modsSet(data))
   }, [])
 
   return (
@@ -91,23 +91,21 @@ function App() {
           />
           <table width="100%">
             <tbody>
-              {pokemon
-                .filter(({ name: { english } }) =>
-                  english
-                    .toLocaleLowerCase()
-                    .includes(filter.toLocaleLowerCase())
+              {mods
+                .filter(({ name }) =>
+                  name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
                 )
                 .slice(0, 20)
-                .map((pokemon) => (
-                  <PokemonRow
-                    pokemon={pokemon}
-                    onClick={(pokemon) => selectedPokemonSet(pokemon)}
+                .map((mods) => (
+                  <ModsRow
+                    mods={mods}
+                    onClick={(mods) => selectedModsSet(mods)}
                   />
                 ))}
             </tbody>
           </table>
         </div>
-        {selectedPokemon && <PokemonInfo {...selectedPokemon} />}
+        {selectedMods && <ModsInfo {...selectedMods} />}
       </div>
     </div>
   )
