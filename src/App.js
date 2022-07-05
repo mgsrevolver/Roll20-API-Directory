@@ -1,8 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { fetchAllModsList, fetchMoreInformation } from './api.tsx'
 
 import './App.css'
+
+const APIkey = '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'
+const allModsURL =
+  'https://api.github.com/repos/Roll20/roll20-api-scripts/contents/'
 
 const ModsType = PropTypes.shape({
   id: PropTypes.string.isRequired,
@@ -53,10 +56,15 @@ function App() {
   const [selectedMods, selectedModsSet] = React.useState(null)
 
   React.useEffect(() => {
-    fetchAllModsList().then((allModsListData) => {
-      setMods(allModsListData)
+    fetch(allModsURL, {
+      method: 'GET',
+      headers: {
+        Authorization: APIkey,
+      },
     })
-  })
+      .then((res) => res.json())
+      .then((data) => setMods(data))
+  }, [])
 
   return (
     <div
